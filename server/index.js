@@ -1,16 +1,16 @@
-const express = require('express')
-const app = express()
-const port = 3000
-
+const express = require('express');
+const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const config = require('./config/key');
 const { User } = require("./models/User");
 const { auth } = require("./middleware/auth");
-const config = require('./config/key');
 
+const port = 5000
 
 // application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: true}));
+
 // application/json
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -19,10 +19,14 @@ const mongoose = require('mongoose')
 mongoose.connect(config.mongoURI, {
     useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false
 }).then(() => console.log('mongoDB Connected...'))
-  .catch(err => console.log('err'))
+  .catch(err => console.log('err!'))
 
   
 app.get('/', (req, res) => res.send('Hello World! 안녕하세요'))
+
+app.get('/api/hello', (req, res) => {
+  res.send("하이")
+})
 
 app.post('/api/users/register', (req, res) => {
   const user = new User(req.body)
